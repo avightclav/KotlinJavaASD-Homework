@@ -18,10 +18,12 @@ class Task1Test {
         int arr2[] = new int[]{-3, -12, -40, -5, -7};
         int arr3[] = new int[]{-3, -4, -5, 0, -17, -34, -56};
         int arr5[] = new int[]{};
-        assertEquals(new Task1.MaxBenefit(3, 8), Task1.maxSubarrayIndexes(arr1, 0, arr1.length));
-        assertEquals(new Task1.MaxBenefit(0, 1), Task1.maxSubarrayIndexes(arr2, 0, arr2.length));
-        assertEquals(new Task1.MaxBenefit(3, 4), Task1.maxSubarrayIndexes(arr3, 0, arr3.length));
-        assertEquals(new  Task1.MaxBenefit(0, 0), Task1.maxSubarrayIndexes(arr5, 0, arr5.length));
+        int arr6[] = new int[]{-10, 18, 7, -3, 2, -24};
+        assertEquals(new Task1.MaxBenefit(3, 8), Task1.maxSubarrayIndexes(arr1));
+        assertEquals(new Task1.MaxBenefit(0, 1), Task1.maxSubarrayIndexes(arr2));
+        assertEquals(new Task1.MaxBenefit(3, 4), Task1.maxSubarrayIndexes(arr3));
+        assertEquals(new  Task1.MaxBenefit(0, 0), Task1.maxSubarrayIndexes(arr5));
+        assertEquals(new Task1.MaxBenefit(1, 3), Task1.maxSubarrayIndexes(arr6));
     }
 
     @Test
