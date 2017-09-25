@@ -59,7 +59,7 @@ public class Task1 {
 
     private static MaxBenefit halfMaxSubarray(int[] arr, int start, int end) {
         if ((end - start) > 1) {
-            int middle = end -  (end - start) / 2;
+            int middle = end - (end - start) / 2;
             MaxBenefit leftArrIndexes, rightArrIndexes, crossingArrIndexes;
 
             leftArrIndexes = halfMaxSubarray(arr, start, middle);
@@ -82,23 +82,29 @@ public class Task1 {
     }
 
     private static MaxBenefit crossingMaxSubarray(int[] arr) {
-        int middle = arr.length / 2, maxLeftIndex = 0, maxRightIndex = arr.length - 1, maxSum = Integer.MIN_VALUE, leftSum = 0, sum;
+        int middle = arr.length / 2, maxLeftIndex = 0, maxRightIndex = arr.length - 1, leftSum = Integer.MIN_VALUE, rightSum = Integer.MIN_VALUE, sum = 0;
         for (int l = middle - 1; l >= 0; l--) {
-            leftSum += arr[l];
-            sum = leftSum;
-            for (int r = middle; r < arr.length; r++) {
-                sum += arr[r];
+            sum += arr[l];
 
-                if (sum >= maxSum) {
-                    maxLeftIndex = l;
-                    maxRightIndex = r + 1;
-                    maxSum = sum;
-                }
-
+            if (sum >= leftSum) {
+                leftSum = sum;
+                maxLeftIndex = l;
             }
         }
-        return new MaxBenefit(maxLeftIndex, maxRightIndex, maxSum);
-    }
+
+        sum = 0;
+        for (int r = middle; r < arr.length; r++) {
+            sum += arr[r];
+
+            if (sum >= rightSum) {
+                maxRightIndex = r + 1;
+                rightSum = sum;
+            }
+
+        }
+        return new MaxBenefit(maxLeftIndex, maxRightIndex, rightSum + leftSum);
+
+}
 
     public static int[] maxSubarray(int[] delta) {
         MaxBenefit leftArrIndexes, rightArrIndexes, crossingArrIndexes;
@@ -137,7 +143,7 @@ public class Task1 {
                 return rightArrIndexes;
             }
         }
-        return new MaxBenefit(0, delta.length, sum(delta,0, delta.length));
+        return new MaxBenefit(0, delta.length, sum(delta, 0, delta.length));
     }
 
     public static MaxBenefit maxSubarrayKadanes(int[] delta) {
