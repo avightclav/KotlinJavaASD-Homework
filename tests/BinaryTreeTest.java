@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -152,6 +154,34 @@ class BinaryTreeTest {
         assertTrue(410 == iterator.next());
         assertTrue(420 == iterator.next());
         assertTrue(430 == iterator.next());
+    }
+
+    @Test
+    void subTree() {
+        BinaryTree<Integer> biTree = new BinaryTree<>();
+        biTree.add(200);
+        biTree.add(100);
+        biTree.add(300);
+        biTree.add(400);
+        biTree.add(350);
+        biTree.add(340);
+        biTree.add(420);
+        biTree.add(410);
+        biTree.add(430);
+        biTree.add(50);
+        biTree.add(25);
+        biTree.add(60);
+        biTree.add(70);
+        biTree.add(55);
+        biTree.add(52);
+        biTree.add(57);
+        biTree.add(65);
+        biTree.add(64);
+        biTree.add(66);
+        biTree.add(63);
+
+        SortedSet<Integer> subSet = biTree.subSet(69, 400);
+        Iterator<Integer> subSetIterator = subSet.iterator();
     }
 
 }
