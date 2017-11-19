@@ -6,109 +6,6 @@ import java.util.Iterator;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BinaryTreeTest {
-
-    @Test
-    void removeLeaf() {
-        BinaryTree<Integer> biTree = new BinaryTree<>();
-        biTree.add(200);
-        biTree.add(100);
-        biTree.add(300);
-        biTree.add(50);
-        biTree.add(25);
-        biTree.add(1);
-        biTree.remove(1);
-        assertTrue(biTree.checkInvariant());
-        assertTrue(biTree.contains(200));
-        assertTrue(biTree.contains(100));
-        assertTrue(biTree.contains(300));
-        assertTrue(biTree.contains(50));
-        assertTrue(biTree.contains(25));
-        assertFalse(biTree.contains(1));
-    }
-
-    @Test
-    void removeNode() {
-        BinaryTree<Integer> biTree = new BinaryTree<>();
-        biTree.add(200);
-        biTree.add(100);
-        biTree.add(300);
-        biTree.add(50);
-        biTree.add(25);
-        biTree.add(60);
-        biTree.add(70);
-        biTree.remove(60);
-        assertTrue(biTree.checkInvariant());
-        assertTrue(biTree.contains(200));
-        assertTrue(biTree.contains(100));
-        assertTrue(biTree.contains(300));
-        assertTrue(biTree.contains(50));
-        assertTrue(biTree.contains(25));
-        assertTrue(biTree.contains(70));
-        assertFalse(biTree.contains(60));
-    }
-
-    @Test
-    void removeNode2() {
-        BinaryTree<Integer> biTree = new BinaryTree<>();
-        biTree.add(200);
-        biTree.add(100);
-        biTree.add(300);
-        biTree.add(50);
-        biTree.add(25);
-        biTree.add(60);
-        biTree.add(70);
-        biTree.add(55);
-        biTree.add(52);
-        biTree.add(57);
-        biTree.remove(60);
-        assertTrue(biTree.checkInvariant());
-        assertTrue(biTree.contains(200));
-        assertTrue(biTree.contains(100));
-        assertTrue(biTree.contains(300));
-        assertTrue(biTree.contains(50));
-        assertTrue(biTree.contains(25));
-        assertTrue(biTree.contains(70));
-        assertTrue(biTree.contains(55));
-        assertTrue(biTree.contains(52));
-        assertTrue(biTree.contains(57));
-        assertFalse(biTree.contains(60));
-    }
-
-    @Test
-    void removeNode3() {
-        BinaryTree<Integer> biTree = new BinaryTree<>();
-        biTree.add(200);
-        biTree.add(100);
-        biTree.add(300);
-        biTree.add(50);
-        biTree.add(25);
-        biTree.add(60);
-        biTree.add(70);
-        biTree.add(55);
-        biTree.add(52);
-        biTree.add(57);
-        biTree.add(65);
-        biTree.add(64);
-        biTree.add(66);
-        biTree.add(63);
-        biTree.remove(60);
-        assertTrue(biTree.checkInvariant());
-        assertTrue(biTree.contains(200));
-        assertTrue(biTree.contains(100));
-        assertTrue(biTree.contains(300));
-        assertTrue(biTree.contains(50));
-        assertTrue(biTree.contains(25));
-        assertTrue(biTree.contains(70));
-        assertTrue(biTree.contains(55));
-        assertTrue(biTree.contains(52));
-        assertTrue(biTree.contains(57));
-        assertTrue(biTree.contains(65));
-        assertTrue(biTree.contains(64));
-        assertTrue(biTree.contains(66));
-        assertTrue(biTree.contains(63));
-        assertFalse(biTree.contains(60));
-    }
-
     @Test
     void iterator() {
         BinaryTree<Integer> biTree = new BinaryTree<>();
@@ -156,17 +53,62 @@ class BinaryTreeTest {
     }
 
     @Test
-    void remove100() {
+    void removeLeaf() {
         BinaryTree<Integer> biTree = new BinaryTree<>();
-        int[] toAdd = new int[]{44, 66, 78, 71, 38, 87, 45, 46, 62, 13, 79, 95, 70, 69, 2, 87, 20, 43, 56, 66, 94, 6, 7};
-        for (int i : toAdd) {
+        int[] toAdd = new int[]{200, 100, 300, 50, 25, 1};
+        for (int i: toAdd) {
             biTree.add(i);
         }
-        biTree.remove(45);
+        biTree.remove(1);
+        assertTrue(biTree.checkInvariant());
 
-        Iterator<Integer> it = biTree.iterator();
+        int[] expected = new int[]{25, 50, 100, 200, 300};
+        assertEquals(Arrays.toString(expected), biTree.toString());
+    }
+
+    @Test
+    void removeNodeWithOneSuccessor() {
+        BinaryTree<Integer> biTree1 = new BinaryTree<>();
+        int[] toAdd = new int[]{44, 66, 78, 71, 38, 87, 45, 46, 62, 13, 79, 95, 70, 69, 2, 87, 20, 43, 56, 66, 94, 6, 7};
+        for (int i : toAdd) {
+            biTree1.add(i);
+        }
+        biTree1.remove(45);
+        assertTrue(biTree1.checkInvariant());
 
         int[] expected = new int[]{2, 6, 7, 13, 20, 38, 43, 44, 46, 56, 62, 66, 69, 70, 71, 78, 79, 87, 94, 95};
-        assertEquals(Arrays.toString(expected), biTree.toString());
+        assertEquals(Arrays.toString(expected), biTree1.toString());
+
+        BinaryTree<Integer> biTree2 = new BinaryTree<>();
+        toAdd = new int[]{200, 100, 300, 50, 25, 60, 70};
+        for (int i : toAdd)
+            biTree2.add(i);
+        biTree2.remove(60);
+
+        expected = new int[]{25, 50, 70, 100, 200, 300};
+        assertEquals(Arrays.toString(expected), biTree2.toString());
+    }
+
+    @Test
+    void removeNodeWithTwoSuccessors(){
+        BinaryTree<Integer> biTree1 = new BinaryTree<>();
+        int[] toAdd = new int[]{200, 100, 300, 50, 25, 60, 70, 55, 52, 57};
+        for(int i: toAdd)
+            biTree1.add(i);
+        biTree1.remove(60);
+        assertTrue(biTree1.checkInvariant());
+
+        int[] expected = new int[]{25, 50, 52, 55, 57, 70, 100, 200, 300};
+        assertEquals(Arrays.toString(expected), biTree1.toString());
+
+
+        BinaryTree<Integer> biTree2 = new BinaryTree<>();
+        toAdd = new int[]{200, 100, 300, 50, 25, 60, 70, 55, 52, 57, 65, 64, 66, 63};
+        for (int i : toAdd)
+            biTree2.add(i);
+        biTree2.remove(60);
+        assertTrue(biTree2.checkInvariant());
+        expected = new int[]{25, 50, 52, 55, 57, 63, 64, 65, 66, 70, 100, 200, 300};
+        assertEquals(Arrays.toString(expected), biTree2.toString());
     }
 }
