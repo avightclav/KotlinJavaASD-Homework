@@ -2,7 +2,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 // Attention: comparable supported but comparator is not
 @SuppressWarnings("WeakerAccess")
@@ -24,11 +23,12 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
     private int size = 0;
 
+    @SuppressWarnings("unchecked")
     class subBinaryTree<T extends Comparable<T>> extends BinaryTree<T> {
-        BinaryTree<T> backedTree;
+        final BinaryTree<T> backedTree;
 
-        T fromElement;
-        T toElement;
+        final T fromElement;
+        final T toElement;
 
         subBinaryTree(T fromElement, T toElement, BinaryTree<T> backedTree) {
             this.backedTree = backedTree;
@@ -59,6 +59,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
         @Override
         public boolean remove(Object o) {
+            @SuppressWarnings("unchecked")
             T t = (T) o;
             if (inRange(t)) {
                 return backedTree.remove(t);
@@ -78,6 +79,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             throw new UnsupportedOperationException();
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public boolean contains(Object o) {
             T t = (T) o;
@@ -90,7 +92,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
         class subBinaryTreeIterator implements Iterator<T> {
             private T current = null;
-            Iterator binaryTreeIterator = backedTree.iterator();
+            final Iterator binaryTreeIterator = backedTree.iterator();
 
             subBinaryTreeIterator() {
             }
@@ -100,6 +102,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 return (findNext() != null);
             }
 
+            @SuppressWarnings("unchecked")
             private T findNext() {
                 current = (T) binaryTreeIterator.next();
                 while ((fromElement != null) && (current.compareTo(fromElement) < 0)) {
@@ -253,7 +256,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
         private Node<T> current = null;
 
-        private Stack<Node<T>> pastNodes;
+        private final Stack<Node<T>> pastNodes;
         private boolean reverseMove;
         private Node<T> pastNode;
 
@@ -266,13 +269,16 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         private Node<T> findNext() {
             if (!reverseMove && (current.left != null)) {
                 if (current.left.left != null) {
-                    pastNodes.push(current);
+                    if (!pastNodes.contains(current)) {
+                        pastNodes.push(current);
+                    }
                     current = current.left;
                     return findNext();
                 } else {
                     if (!pastNodes.contains(current)) {
                         pastNodes.push(current);
                     }
+                    pastNode = current.left;
                     return current.left;
                 }
             } else if (current.right != null) {
@@ -300,13 +306,14 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         @Override
         public T next() {
             current = findNext();
+
+            if (pastNode.right == current) {
+                reverseMove = false;
+            }
             if (reverseMove && !pastNodes.isEmpty())
                 pastNode = pastNodes.pop();
-            if (pastNode.right == current)
-                reverseMove = false;
-            if (current == root) {
-                pastNodes.push(current.right);
-            }
+
+
             if (current == null) throw new NoSuchElementException();
 
             return current.value;

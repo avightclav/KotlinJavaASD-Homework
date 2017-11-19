@@ -1,8 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -157,57 +156,17 @@ class BinaryTreeTest {
     }
 
     @Test
-    void subTree() {
+    void remove100() {
         BinaryTree<Integer> biTree = new BinaryTree<>();
-        biTree.add(200);
-        biTree.add(100);
-        biTree.add(300);
-        biTree.add(400);
-        biTree.add(350);
-        biTree.add(340);
-        biTree.add(420);
-        biTree.add(410);
-        biTree.add(430);
-        biTree.add(50);
-        biTree.add(25);
-        biTree.add(60);
-        biTree.add(70);
-        biTree.add(55);
-        biTree.add(52);
-        biTree.add(57);
-        biTree.add(65);
-        biTree.add(64);
-        biTree.add(66);
-        biTree.add(63);
-
-        SortedSet<Integer> subSet = biTree.subSet(69, 400);
-        Iterator<Integer> subSetIterator = subSet.iterator();
-    }
-
-    @Test
-    void remove100(){
-        BinaryTree<Integer> biTree = new BinaryTree<>();
-        int[] arr = new int[]{ 44, 66, 78, 71, 38, 87, 45, 46, 62, 13, 79, 95, 70, 69, 2, 87, 20, 43, 56, 66, 94, 6, 7};
-
-        for (int i : arr) {
+        int[] toAdd = new int[]{44, 66, 78, 71, 38, 87, 45, 46, 62, 13, 79, 95, 70, 69, 2, 87, 20, 43, 56, 66, 94, 6, 7};
+        for (int i : toAdd) {
             biTree.add(i);
         }
-
         biTree.remove(45);
+
         Iterator<Integer> it = biTree.iterator();
 
-        int[] arr2 = new int[]{62, 44, 66, 78, 71, 38, 87, 46, 13, 79, 95, 70, 2, 87, 20, 43, 56, 66, 94};
-
-        for (int i: arr2) {
-            assertTrue(biTree.contains(i));
-        }
-
-        int i = 0;
-        while (it.hasNext()) {
-            System.out.println(it.next());
-            i++;
-            if (i > 20) break;
-        }
+        int[] expected = new int[]{2, 6, 7, 13, 20, 38, 43, 44, 46, 56, 62, 66, 69, 70, 71, 78, 79, 87, 94, 95};
+        assertEquals(Arrays.toString(expected), biTree.toString());
     }
-
 }

@@ -1,10 +1,11 @@
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 public class Task1 {
 
     public static class MaxBenefit {
-        int i, j, sum;
+        final int i;
+        final int j;
+        int sum;
 
         MaxBenefit(int i, int j) {
             this.i = i;
