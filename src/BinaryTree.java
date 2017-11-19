@@ -255,38 +255,41 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
         private Stack<Node<T>> pastNodes;
         private boolean reverseMove;
-        private Node<T> tmpResult;
+        private Node<T> pastNode;
 
         private BinaryTreeIterator() {
             pastNodes = new Stack<>();
             current = root;
-            tmpResult = current;
+            pastNode = root;
         }
 
         private Node<T> findNext() {
-            if (!reverseMove && tmpResult.left != null) {
-                pastNodes.push(tmpResult);
-                tmpResult = tmpResult.left;
-                return findNext();
-            } else if (tmpResult.right != null) {
-                if (tmpResult.equals(root)) {
-                    return tmpResult.right;
-                }
-                tmpResult = tmpResult.right;
-                reverseMove = false;
-                tmpResult = findNext();
-            } else {
-                if (!reverseMove) {
-                    pastNodes.push(tmpResult);
-                }
-                if (pastNodes.size() != 0) {
-                    reverseMove = true;
-                    return pastNodes.lastElement();
+            if (!reverseMove && (current.left != null)) {
+                if (current.left.left != null) {
+                    pastNodes.push(current);
+                    current = current.left;
+                    return findNext();
                 } else {
-                    tmpResult = null;
+                    if (!pastNodes.contains(current)) {
+                        pastNodes.push(current);
+                    }
+                    return current.left;
                 }
+            } else if (current.right != null) {
+                if (current.right.left != null) {
+                    current = current.right;
+                    pastNodes.push(current);
+                    reverseMove = false;
+                    return findNext();
+                }
+                return current.right;
+            } else {
+                reverseMove = true;
+                if (!pastNodes.isEmpty())
+                    return pastNodes.lastElement();
+                else
+                    return null;
             }
-            return tmpResult;
         }
 
         @Override
@@ -297,11 +300,15 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         @Override
         public T next() {
             current = findNext();
-            if (reverseMove && (pastNodes.size() != 0)) {
-                pastNodes.pop();
+            if (reverseMove && !pastNodes.isEmpty())
+                pastNode = pastNodes.pop();
+            if (pastNode.right == current)
+                reverseMove = false;
+            if (current == root) {
+                pastNodes.push(current.right);
             }
-            tmpResult = current;
             if (current == null) throw new NoSuchElementException();
+
             return current.value;
         }
 

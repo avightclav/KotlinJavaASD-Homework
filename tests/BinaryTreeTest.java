@@ -184,4 +184,30 @@ class BinaryTreeTest {
         Iterator<Integer> subSetIterator = subSet.iterator();
     }
 
+    @Test
+    void remove100(){
+        BinaryTree<Integer> biTree = new BinaryTree<>();
+        int[] arr = new int[]{ 44, 66, 78, 71, 38, 87, 45, 46, 62, 13, 79, 95, 70, 69, 2, 87, 20, 43, 56, 66, 94, 6, 7};
+
+        for (int i : arr) {
+            biTree.add(i);
+        }
+
+        biTree.remove(45);
+        Iterator<Integer> it = biTree.iterator();
+
+        int[] arr2 = new int[]{62, 44, 66, 78, 71, 38, 87, 46, 13, 79, 95, 70, 2, 87, 20, 43, 56, 66, 94};
+
+        for (int i: arr2) {
+            assertTrue(biTree.contains(i));
+        }
+
+        int i = 0;
+        while (it.hasNext()) {
+            System.out.println(it.next());
+            i++;
+            if (i > 20) break;
+        }
+    }
+
 }
