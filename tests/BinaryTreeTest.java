@@ -1,3 +1,4 @@
+import Task2.BinaryTree;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

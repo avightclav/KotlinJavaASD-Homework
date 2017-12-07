@@ -1,3 +1,5 @@
+package Task2;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -171,7 +173,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return true;
     }
 
-    boolean checkInvariant() {
+    public boolean checkInvariant() {
         return root == null || checkInvariant(root);
     }
 

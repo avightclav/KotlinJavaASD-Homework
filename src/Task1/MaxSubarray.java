@@ -1,13 +1,15 @@
+package Task1;
+
 import java.util.Arrays;
 
-public class Task1 {
+public class MaxSubarray {
 
     public static class MaxBenefit {
         final int i;
         final int j;
         int sum;
 
-        MaxBenefit(int i, int j) {
+        public MaxBenefit(int i, int j) {
             this.i = i;
             this.j = j;
             this.sum = 0;
