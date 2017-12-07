@@ -4,6 +4,7 @@ import Additional.Graph;
 import Additional.GraphBuilder;
 import Additional.Path;
 import Task3.ant.AntVoyagingPathSearcher;
+import Task3.genetic.GeneticVoyagingPathSearcher;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,9 +16,9 @@ import static Additional.VoyagerKt.*;
 class AntVoyagingPathSearcherTest {
 
     @Test
-    void solve() {
+    void fingVoyagingPathDefinedGraph() {
         GraphBuilder gb = new GraphBuilder();
-        Graph.Vertex v1 =  gb.addVertex("1");
+        Graph.Vertex v1 = gb.addVertex("1");
         Graph.Vertex v2 = gb.addVertex("2");
         Graph.Vertex v3 = gb.addVertex("3");
         Graph.Vertex v4 = gb.addVertex("4");
@@ -51,34 +52,65 @@ class AntVoyagingPathSearcherTest {
     }
 
     @Test
-    void solve2() {
-
+    void findVoyagerPathRandomGraph() {
         Random random = new Random();
         ArrayList<Graph.Vertex> vertices = new ArrayList<>();
         GraphBuilder gb = new GraphBuilder();
-        for (int i = 0; i < 5; i++) {
+        int graphSize = 6;
+
+        for (int i = 0; i < graphSize; i++) {
             vertices.add(gb.addVertex(Integer.toString(i)));
         }
 
-        for (int i = 0; i < 10; i++) {
-            int[] ints = new int[10];
-            ints[i] = 1;
-            for (Graph.Vertex vertex : vertices) {
-                int rand = new Random().nextInt(4);
-                if (ints[rand] != 1) {
-                    gb.addConnection(vertex, vertices.get(rand), 40);
-                    ints[rand] = 1;
+        int i = 0;
+        for (Graph.Vertex vertex : vertices) {
+            i++;
+            for (int j = 0 + i; j < graphSize; j++) {
+                if ((Integer.parseInt(vertex.getName()) != j)) {
+                    gb.addConnection(vertex, vertices.get(j), 10 + random.nextInt(60));
                 }
             }
         }
 
         Graph g = gb.build();
-        AntVoyagingPathSearcher searcher = new AntVoyagingPathSearcher(g, 1, 5, 1, 60);
-        List<Graph.Vertex> list = searcher.findVoyagingPath();
+        AntVoyagingPathSearcher searcher = new AntVoyagingPathSearcher(g, 1, 5, 500, 40);
+        Path bestPath = searcher.findVoyagingPath();
+        System.out.println(bestPath.getVertices().toString() + "length: " + bestPath.getLength());
 
-        Path path = findVoyagingPath(g, new Path(list.get(0)), null);
+        Path path = findVoyagingPath(g, new Path(bestPath.getVertices().get(0)), null);
         System.out.println(path);
-        System.out.println(path.getLength());
+    }
+
+    @Test
+    void findVojagingPathRandomGraphPlusGenetic() {
+        Random random = new Random();
+        ArrayList<Graph.Vertex> vertices = new ArrayList<>();
+        GraphBuilder gb = new GraphBuilder();
+        int graphSize = 10;
+
+        for (int i = 0; i < graphSize; i++) {
+            vertices.add(gb.addVertex(Integer.toString(i)));
+        }
+
+        int i = 0;
+        for (Graph.Vertex vertex : vertices) {
+            i++;
+            for (int j = 0 + i; j < graphSize; j++) {
+                if ((Integer.parseInt(vertex.getName()) != j)) {
+                    gb.addConnection(vertex, vertices.get(j), 10 + random.nextInt(60));
+                }
+            }
+        }
+
+        Graph g = gb.build();
+
+        AntVoyagingPathSearcher searcherAnt = new AntVoyagingPathSearcher(g, 1, 5, 500, 20);
+        Path bestPath = searcherAnt.findVoyagingPath();
+        System.out.println(bestPath.getVertices().toString() + "length: " + bestPath.getLength());
+
+        GeneticVoyagingPathSearcher searcherGenetic = new GeneticVoyagingPathSearcher(g, 10, 20);
+        Path pathGenetic = searcherGenetic.findVoyagingPath();
+        System.out.println(pathGenetic);
     }
 
 }

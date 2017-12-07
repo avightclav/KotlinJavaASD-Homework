@@ -9,8 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class AntVoyagingPathSearcher {
-    int step = 0;
+public class AntVoyagingPathSearcher extends AbstractVoyagingPathSearcher {
     private Random random = new Random();
     private final int FINE = 500;
     private double prohibitedEdgePheromone = 1.0;
@@ -31,20 +30,6 @@ public class AntVoyagingPathSearcher {
     private final double randomChoiceCoefficient = 0.01;
     private final int maxIterations;
 
-    public List<Vertex> findVoyagingPath() {
-        int iteration = 0;
-
-        while (iteration < maxIterations) {
-            setupAnts();
-            moveAnts();
-            updatePheromones();
-            updateBest();
-            iteration++;
-        }
-        System.out.println("Best tour length: " + (bestLength));
-        System.out.println("Best tour:" + bestPath);
-        return bestPath;
-    }
 
     public class Ant {
         List<Vertex> visited = new ArrayList<>();
@@ -84,6 +69,7 @@ public class AntVoyagingPathSearcher {
     }
 
     public AntVoyagingPathSearcher(Graph graph, int greedyCoefficient, double pheromoneCoefficient, int exponentOfOptimal, int maxIterations) {
+        super(graph);
         this.graph = graph;
         this.greedyCoefficient = greedyCoefficient;
         this.pheromoneCoefficient = pheromoneCoefficient;
@@ -210,10 +196,25 @@ public class AntVoyagingPathSearcher {
         for (Ant ant : ants) {
             if (ant.tourLength() < bestLength) {
                 bestLength = ant.tourLength();
-                bestPath = new ArrayList<Vertex>();
+                bestPath = new ArrayList<>();
                 bestPath.addAll(ant.getVisited());
             }
         }
     }
 
+    @NotNull
+    @Override
+    public Path findVoyagingPath() {
+        int iteration = 0;
+
+        while (iteration < maxIterations) {
+            setupAnts();
+            moveAnts();
+            updatePheromones();
+            updateBest();
+            iteration++;
+        }
+
+        return new Path(bestPath, bestLength);
+    }
 }

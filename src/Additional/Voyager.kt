@@ -2,7 +2,7 @@ package Additional
 
 import Additional.Graph.Vertex
 
-class Path private constructor(
+class Path public constructor(
         val vertices: List<Vertex>,
         val length: Int
 ) : Comparable<Path> {
