@@ -43,20 +43,20 @@ class AntVoyagingPathSearcherTest {
         gb.addConnection(v10, v4, 3);
         Graph g = gb.build();
 
-        Path path = findVoyagingPath(g, new Path(g.getVertices().toArray(new Graph.Vertex[0])[0]), null);
-        System.out.println(path);
-        System.out.println(path.getLength());
-
         AntVoyagingPathSearcher searcher = new AntVoyagingPathSearcher(g, 1, 5, 1, 500);
-        searcher.findVoyagingPath();
+        Path antPath = searcher.findVoyagingPath();
+        System.out.println(antPath);
+
+        Path path = findVoyagingPath(g, new Path(g.get("1")), null);
+        System.out.println(path);
     }
 
     @Test
-    void findVoyagerPathRandomGraph() {
+    void findVoyagingPathRandomGraph() {
         Random random = new Random();
         ArrayList<Graph.Vertex> vertices = new ArrayList<>();
         GraphBuilder gb = new GraphBuilder();
-        int graphSize = 6;
+        int graphSize = 5;
 
         for (int i = 0; i < graphSize; i++) {
             vertices.add(gb.addVertex(Integer.toString(i)));
@@ -73,16 +73,16 @@ class AntVoyagingPathSearcherTest {
         }
 
         Graph g = gb.build();
-        AntVoyagingPathSearcher searcher = new AntVoyagingPathSearcher(g, 1, 5, 500, 40);
+        AntVoyagingPathSearcher searcher = new AntVoyagingPathSearcher(g, 2, 5, 500, 40);
         Path bestPath = searcher.findVoyagingPath();
         System.out.println(bestPath.getVertices().toString() + "length: " + bestPath.getLength());
 
-        Path path = findVoyagingPath(g, new Path(bestPath.getVertices().get(0)), null);
+        Path path = findVoyagingPath(g, new Path(g.get("0")), null);
         System.out.println(path);
     }
 
     @Test
-    void findVojagingPathRandomGraphPlusGenetic() {
+    void findVoyagingPathRandomGraphPlusGenetic() {
         Random random = new Random();
         ArrayList<Graph.Vertex> vertices = new ArrayList<>();
         GraphBuilder gb = new GraphBuilder();
@@ -105,12 +105,12 @@ class AntVoyagingPathSearcherTest {
         Graph g = gb.build();
 
         AntVoyagingPathSearcher searcherAnt = new AntVoyagingPathSearcher(g, 1, 5, 500, 20);
-        Path bestPath = searcherAnt.findVoyagingPath();
-        System.out.println(bestPath.getVertices().toString() + "length: " + bestPath.getLength());
+        Path antPath = searcherAnt.findVoyagingPath();
+        System.out.println("Ant: " + antPath);
 
         GeneticVoyagingPathSearcher searcherGenetic = new GeneticVoyagingPathSearcher(g, 10, 20);
         Path pathGenetic = searcherGenetic.findVoyagingPath();
-        System.out.println(pathGenetic);
+        System.out.println("Genetic: " + pathGenetic);
     }
 
 }
